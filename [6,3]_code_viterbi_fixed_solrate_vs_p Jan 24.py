@@ -142,8 +142,9 @@ def create_qaoa_circ(optm_param, theta, num_qubit, p, r):  # beta and gamma are 
     circ.barrier()
 
     for i in range(p):
-        circ.append(mixer(beta[i], num_qubit), range(2 * num_qubit))
         circ.append(cost_unitary(gamma[i], num_qubit), range(2 * num_qubit))
+        circ.append(mixer(beta[i], num_qubit), range(2 * num_qubit))
+
 
     circ.measure_all()
 
@@ -266,10 +267,10 @@ def main():
                 approx_ratio = []
 
                 for repeatation in range(5):
-                    expectation = get_expectation(r, k, optm_param)
+                    expectation = get_expectation(r, k+1, optm_param)
 
-                    res = minimize(expectation, [random.uniform(0, 20),
-                                                 random.uniform(0, 50 * np.pi)],
+                    res = minimize(expectation, [random.uniform(0, np.pi),
+                                                 random.uniform(0, np.pi)],
                                    method='COBYLA')  # method='trust-constr'’
 
                     alpha.append(res.fun)
@@ -285,9 +286,9 @@ def main():
                     if approx_ratio[j] == min_approx_ratio:
                         optm_param.append(param1[j])
                         optm_param.append(param2[j])
-
+                # print("Simulation:"+str(xxx)+"For p =" + str(k+1) + "len of optimum param is" + str(len(optm_param)))
             num_qubit = 6
-            print("For p ="+str(p)+"len of optimum param is"+str(len(optm_param)))
+
             optm_circ = create_qaoa_circ1(optm_param, num_qubit, p, r)
 
             simulator = Aer.get_backend('qasm_simulator')
