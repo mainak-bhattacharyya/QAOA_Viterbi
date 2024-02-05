@@ -286,7 +286,9 @@ def main():
                     if approx_ratio[j] == min_approx_ratio:
                         optm_param.append(param1[j])
                         optm_param.append(param2[j])
-                # print("Simulation:"+str(xxx)+"For p =" + str(k+1) + "len of optimum param is" + str(len(optm_param)))
+                print("Simulation:"+str(xxx)+"For p =" + str(k+1) + "len of optimum param is" + str(len(optm_param)))
+                # print("Optimum parameter for "+str(p)+"is",optm_param)
+
             num_qubit = 6
 
             optm_circ = create_qaoa_circ1(optm_param, num_qubit, p, r)

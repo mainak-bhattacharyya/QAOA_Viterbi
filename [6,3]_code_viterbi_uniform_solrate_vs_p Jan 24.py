@@ -133,8 +133,9 @@ def create_qaoa_circ(theta, num_qubit, p, r):
 
         # The time evolution unitary of cost hamiltonian:
 
-        circ.append(mixer(beta, num_qubit), range(2 * num_qubit))
+
         circ.append(cost_unitary(gamma, num_qubit), range(2 * num_qubit))
+        circ.append(mixer(beta, num_qubit), range(2 * num_qubit))
 
     circ.measure(range(num_qubit), range(num_qubit))
 
@@ -187,7 +188,7 @@ from scipy.optimize import minimize
 
 def main():
     Data = {}
-    no = 10
+    no = 4
     legend = []
     sim_average = 0.0
     for xxx in range(no):
@@ -224,6 +225,8 @@ def main():
                 if approx_ratio[i] == min_approx_ratio:
                     param_beta.append(param_1[i])
                     param_gamma.append(param_2[i])
+
+            print("For p =" + str(p) + "len of optimum param is" + str(len(param_beta)))
 
             num_qubit = 6
 
@@ -267,7 +270,7 @@ def main():
     Data["Simulation_avg"]  = sim_average
 
     df = pd.DataFrame(Data)
-    df.to_excel("633_uni_succ_rate_data.xlsx", index=False)
+    # df.to_excel("633_uni_succ_rate_data.xlsx", index=False)
 
     plt.axhline(y=sim_average, color="darkgoldenrod", linestyle='-')
 
