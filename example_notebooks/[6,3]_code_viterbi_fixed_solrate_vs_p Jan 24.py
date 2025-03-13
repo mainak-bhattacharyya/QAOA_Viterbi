@@ -6,6 +6,9 @@ import pandas as pd
 
 from qiskit.circuit import Parameter
 
+from qiskit_aer import QasmSimulator
+from qiskit import transpile 
+
 import matplotlib.pyplot as plt
 
 def reverse(string):
@@ -226,13 +229,20 @@ def compute_expectation(counts, r):
 
 
 def get_expectation(r, p, optm_param):
-    simulator = Aer.get_backend('qasm_simulator')
+    simulator = QasmSimulator()
     shots = 1000
     num_qubit = 6
 
     def execute_circ(theta):
         circ = create_qaoa_circ(optm_param, theta, num_qubit, p, r)
-        job = execute(circ, backend=simulator, shots=2000)
+
+        simulator = QasmSimulator()
+
+        compiled_circ = transpile(circ, simulator)
+
+        job = simulator.run(compiled_circ, shots=2000)#execute(optm_circ, backend=simulator, shots=2000)
+
+        # job = execute(circ, backend=simulator, shots=2000)
         counts = job.result().get_counts()
 
         return compute_expectation(counts, r)
@@ -293,9 +303,11 @@ def main():
 
             optm_circ = create_qaoa_circ1(optm_param, num_qubit, p, r)
 
-            simulator = Aer.get_backend('qasm_simulator')
+            simulator = QasmSimulator()
 
-            job = execute(optm_circ, backend=simulator, shots=2000)
+            compiled_circ = transpile(optm_circ, simulator)
+
+            job = simulator.run(compiled_circ, shots=2000)#execute(optm_circ, backend=simulator, shots=2000)
 
             counts = job.result().get_counts()
 
@@ -339,9 +351,9 @@ def main():
 
     plt.grid(linestyle='--', axis='y')
 
-    # plt.savefig('633fixed_soln_rate2', dpi=600)
+    plt.savefig('633fixed_soln_rate2', dpi=600)
 
-    plt.show()
+    # plt.show()
 
 if __name__ == "__main__":
     main()
