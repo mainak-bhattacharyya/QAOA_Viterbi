@@ -1,3 +1,4 @@
+ldpc @ git+https://github.com/quantumgizmos/ldpc_v2.git
 qiskit==1.4.2
 qiskit-aer==0.16.4
 matplotlib==3.10.1

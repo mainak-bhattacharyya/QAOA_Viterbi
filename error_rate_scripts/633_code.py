@@ -219,7 +219,7 @@ if __name__ == "__main__":
     simulation_shots = 1000
     results = np.zeros((1,len(noise_prob)))
 
-    results[0,:] = jl.Parallel(n_jobs=20,backend="multiprocessing")(
+    results[0,:] = jl.Parallel(n_jobs=-1,backend="multiprocessing")(
                         jl.delayed(get_wer)(
                             num_qubit,
                             no_layer,
