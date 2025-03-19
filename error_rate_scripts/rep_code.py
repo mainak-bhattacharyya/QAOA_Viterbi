@@ -163,16 +163,16 @@ def get_wer(distance, no_layer, p, simulation_shots):
 
 
 if __name__ == "__main__":
-    distances = [3, 5]
-    noise_prob = np.array([0.001, 0.002, 0.003])
+    distances = [5,9]
+    noise_prob = np.array([0.1, 0.2, 0.3, 0.4])
     no_layer = 3
     # samples to stimate WER
-    simulation_shots = 20
+    simulation_shots = 500
     results = np.zeros((len(distances),len(noise_prob)))
     # results = np.empty((len(distances), len(noise_prob), simulation_shots))
 
     for i, d in enumerate(distances):
-        results[i,:] = jl.Parallel(n_jobs=20,backend="multiprocessing")(
+        results[i,:] = jl.Parallel(n_jobs=-1,backend="multiprocessing")(
                             jl.delayed(get_wer)(
                                 d,
                                 no_layer,
@@ -182,6 +182,7 @@ if __name__ == "__main__":
                             for p in tqdm(noise_prob)
         )
 
+    print(f"results for no_layer: {no_layer}, simulation shots: {simulation_shots}")
     print(results)
 
     plt.figure(figsize=(10,6))
@@ -191,6 +192,4 @@ if __name__ == "__main__":
     
     plt.legend()
 
-    plt.savefig('data/test_rep.png',dpi = 300)
-
-    plt.show()
+    plt.savefig('data/qaoa_rep.png',dpi = 300)
